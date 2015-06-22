@@ -24,30 +24,42 @@
     [string getCharacters:buffer range:NSMakeRange(0, count)];
     
     for (int i = 0; i < count; i++) {
-        if (buffer[i] == ' ') {
+        if (buffer[i] == ' ' || ispunct(buffer[i])) {
             result[i] = buffer[i];
             continue;
         }
         
+   
         int low = islower(buffer[i]) ? 'a' : 'A';
-        int high = islower(buffer[i]) ? 'z' : 'Z';
-        BOOL wrap = buffer[i] + offset > high || buffer[i] + offset < low;
-        
-        result[i] = wrap ? ((buffer[i] + offset) % high) + (low - 1) : buffer[i] + offset;
+        result[i] = (buffer[i]%low + offset)%26 + low;
     }
     
     return [NSString stringWithCharacters:result length:count];
 }
 
 - (NSString *)decode:(NSString *)string offset:(int)offset {
-    return [self encode:string offset:26 - offset];
-}
-
+    return [self encode:string offset: (26 - offset)];
+}  
 @end
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
        
+        CaesarCipher *str = [[CaesarCipher alloc] init];
+        
+        NSString *test = @"$my NAME, is VarinDra?";
+        NSString *cipher = [str encode:test offset:3];
+        NSString *reverse = [str decode:cipher offset:3];
+        
+        NSLog(@"%@\n",test);
+        NSLog(@"%@\n",cipher);
+        NSLog(@"%@\n",reverse);
+        
+        
+        
+        
+        
+        
 
     }
 }
