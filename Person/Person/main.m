@@ -19,6 +19,9 @@
 - (void)setPhoneNumber:(NSString *)phoneNumber;
 - (NSString *)phoneNumber;
 
+- (Person *) registerChild;
+
+
 @end
 
 @implementation Person {
@@ -51,6 +54,14 @@
     return _phoneNumber;
 }
 
+- (Person *)registerChild {
+    Person *child = [[Person alloc] init];
+    [child setName:@"Abc"];
+    [child setCity:self.city];
+    [child setPhoneNumber:self.phoneNumber];
+    return child;
+}
+
 @end
 
 
@@ -58,6 +69,14 @@ int main(int argc, const char * argv[]) {
     @autoreleasepool {
         // insert code here...
         NSLog(@"Hello, World!");
+        
+        Person *parent = [[Person alloc] init];
+        [parent setPhoneNumber:@"555-555-5555"];
+        [parent setCity:@"NY"];
+        Person *kid = [parent registerChild];
+        NSLog(@"%@ \n%@",[kid name], [kid phoneNumber]);
+        
+        
     }
     return 0;
 }

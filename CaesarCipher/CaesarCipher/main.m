@@ -12,6 +12,7 @@
 
 - (NSString *)decode:(NSString *)string offset:(int)offset;
 - (NSString *)encode:(NSString *)string offset:(int)offset;
+- (BOOL) isEqual:(NSString*)first other:(NSString*)second;
 
 @end
 
@@ -39,7 +40,22 @@
 
 - (NSString *)decode:(NSString *)string offset:(int)offset {
     return [self encode:string offset: (26 - offset)];
-}  
+}
+
+- (BOOL) isEqual:(NSString*)first other:(NSString*)second{
+    if ([first length]!= [second length]){
+        return NO;
+    }
+    CaesarCipher * temp = [[CaesarCipher alloc] init];
+    for (int i=1; i<26; i++){
+        NSString *holder = [temp encode:second offset:i];
+        if([first isEqualToString:holder]){
+            return YES;
+        }
+    }
+    return NO;
+}
+
 @end
 
 int main(int argc, const char * argv[]) {
@@ -55,8 +71,12 @@ int main(int argc, const char * argv[]) {
         NSLog(@"%@\n",cipher);
         NSLog(@"%@\n",reverse);
         
-        
-        
+        if([str isEqual:cipher other:@"hello I am sphagetti"]){
+            NSLog(@"Yeah");
+        }
+        else{
+            NSLog(@"Nope");
+        }
         
         
         
