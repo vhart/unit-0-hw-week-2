@@ -68,6 +68,7 @@
 - (void)vote:(NSInteger)index;
 - (void)displayCandidates;
 - (void)displayResults;
+- (void)winnerIs;
 
 @end
 
@@ -76,6 +77,7 @@
 @implementation Election {
     NSString *_electionName;
     NSMutableArray *_listOfContenders;
+    NSMutableArray *_listOfWinners;
 }
 
 - (instancetype)initWithElectionName:(NSString *)name {
@@ -116,8 +118,10 @@
 - (void)displayResults {
     printf("\n%s\n", [_electionName UTF8String]);
     for (Contender *c in _listOfContenders) {
+        usleep(4e5);
         printf("%s\n", [[c description] UTF8String]);
     }
+    usleep(4e5);
 }
 
 - (void)vote {
@@ -149,6 +153,40 @@
         
 }
 
+- (void)winnerIs {
+    NSInteger i=0;
+    int count = 1;
+    if (_listOfWinners == nil){
+        _listOfWinners = [[NSMutableArray alloc] init];
+    }
+    
+    for (Contender *c in _listOfContenders){
+        if (i == [c votesReceived]){
+            count++;
+        }
+        if(i < [c votesReceived]){
+            i = [c votesReceived];
+            count = 1;
+        }
+        
+    }
+    int j = 1;
+    NSString *print = [NSString stringWithFormat:@"\n%@", (count==1) ? @"The winner is: " : @"We have a tie between: "] ;
+    for (Contender *c in _listOfContenders){
+        if(i == [c votesReceived] && j == count){
+            print = [print stringByAppendingFormat:@"%@",(count==1) ?[c name] : [@"and " stringByAppendingString:[c name]]];
+            j++;
+            continue;
+        }
+        if( i == [c votesReceived]){
+            print = [print stringByAppendingFormat:@"%@ ",(count == 2)? [c name] : [@", " stringByAppendingString:[c name]]];
+            j++;
+        }
+    }
+    
+    printf("%s",[[print description] UTF8String]);
+}
+
 @end
 
 
@@ -159,6 +197,7 @@
 - (void)initiatePolling;
 - (void)displayResults;
 - (BOOL)pollsOpen;
+- (void)winnerIs;
 
 @end
 
@@ -198,6 +237,11 @@
     return answer != 0;
 }
 
+- (void)winnerIs {
+    for(Election *race in _races){
+        [race winnerIs];
+    }
+}
 
 @end
 
@@ -223,7 +267,9 @@
 
 -(void)runElection {
     [_manager initiatePolling];
+    printf("\n");
     [_manager displayResults];
+    [_manager winnerIs];
 }
 
 @end
