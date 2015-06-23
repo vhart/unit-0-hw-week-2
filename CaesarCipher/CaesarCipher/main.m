@@ -47,7 +47,7 @@
     if ([first length]!= [second length]){
         return NO;
     }
-    //run through all possible offsets and see if one matches 
+    //run through all possible offsets and see if one matches
     CaesarCipher * temp = [[CaesarCipher alloc] init];
     for (int i=1; i<26; i++){
         NSString *holder = [temp encode:second offset:i];
@@ -72,8 +72,10 @@ int main(int argc, const char * argv[]) {
         NSLog(@"%@\n",test);
         NSLog(@"%@\n",cipher);
         NSLog(@"%@\n",reverse);
-        
-        if([str isEqual:cipher other:@"hello I am sphagetti"]){
+    
+                
+                
+        if([str isEqual:cipher other:[str encode:@"hello I am sphagetti" offset:4]]){
             NSLog(@"Yeah");
         }
         else{
