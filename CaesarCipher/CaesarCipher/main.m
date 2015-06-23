@@ -42,10 +42,12 @@
     return [self encode:string offset: (26 - offset)];
 }
 
+//comparison method
 - (BOOL) isEqual:(NSString*)first other:(NSString*)second{
     if ([first length]!= [second length]){
         return NO;
     }
+    //run through all possible offsets and see if one matches
     CaesarCipher * temp = [[CaesarCipher alloc] init];
     for (int i=1; i<26; i++){
         NSString *holder = [temp encode:second offset:i];
