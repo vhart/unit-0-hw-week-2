@@ -201,10 +201,52 @@
 
 @end
 
+@interface VotingSimulator: NSObject
+
+-(instancetype)initWithManager:(ElectionManager *)manager;
+//-(ElectionManager *)manager;
+-(void)runElection;
+
+@end
+
+@implementation VotingSimulator {
+ ElectionManager * _manager;
+}
+
+-(instancetype)initWithManager:(ElectionManager *)manager{
+    if (self = [super init]) {
+        _manager = manager;
+        return self;
+    }
+    return nil;
+}
+
+-(void)runElection {
+    [_manager initiatePolling];
+    [_manager displayResults];
+}
+
+@end
 
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
+        
+        Contender *first = [[Contender alloc] initWithName:@"Blue"];
+        Contender *second = [[Contender alloc] initWithName:@"Red"];
+        Contender *third = [[Contender alloc] initWithName:@"Green"];
+        
+        Election *bam = [[Election alloc] initWithElectionName:@"Color Race"];
+        ElectionManager *Jah_mez = [[ElectionManager alloc] init];
+        [Jah_mez manage:bam];
+        [bam addContender: first];
+        [bam addContender: second];
+        [bam addContender: third];
+        
+        VotingSimulator *voting2015 = [[VotingSimulator alloc] initWithManager:Jah_mez];
+        [voting2015 runElection];
+        
+        
         
     }
     return 0;
