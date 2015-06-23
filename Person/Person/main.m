@@ -20,6 +20,7 @@
 - (NSString *)phoneNumber;
 
 - (Person *) registerChild;
+- (BOOL)checkSameCity:(Person *)other;
 
 
 @end
@@ -62,6 +63,13 @@
     return child;
 }
 
+- (BOOL)checkSameCity:(Person *)other{
+    if([_city isEqualToString:[other city]]){
+        return YES;
+    }
+        return NO;
+}
+
 @end
 
 
@@ -75,6 +83,7 @@ int main(int argc, const char * argv[]) {
         [parent setCity:@"NY"];
         Person *kid = [parent registerChild];
         NSLog(@"%@ \n%@",[kid name], [kid phoneNumber]);
+        NSLog(@"%d",[parent checkSameCity:kid]);
         
         
     }
